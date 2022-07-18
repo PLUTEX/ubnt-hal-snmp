@@ -16,7 +16,7 @@ CACHE_FILE="/dev/shm/$(basename "$0").cache"
 
 fan_oid_list() {
 	sudo /usr/sbin/ubnt-hal getFanTach | sort | {
-		awk -F": " -v prefix="${OID_PREFIX}.6.1" -v idx=1 '{
+		awk -F": " -v prefix="${OID_PREFIX}.6.1" -v idx=1 '/^FAN [0-9]+: [0-9]+ RPM$/ {
 			sub(/ RPM$/, "", $2)
 			print prefix ".1." idx ".0 integer " idx
 			print prefix ".2." idx ".0 integer 1"
@@ -45,7 +45,7 @@ power_oid_list() {
 }
 
 temp_oid_list() {
-	sudo /usr/sbin/ubnt-hal getTemp | sort | {
+	sudo /usr/sbin/ubnt-hal getTemp 2> /dev/null | sort | {
 		awk -F: -v prefix="${OID_PREFIX}.8.1" -v idx=1 '$2 != "" {
 			sub(/[^0-9].*$/, "", $2)
 			print prefix ".1." idx ".0 integer 1"
