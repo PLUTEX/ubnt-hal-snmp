@@ -6,11 +6,12 @@ switches).
 ## Installation
 
 1. Copy `ubnt-hal-snmp.sh` to `/config/scripts/` on the router
-2. Execute the following commands on the router:
-
-       echo "Debian-snmp ALL = NOPASSWD: /usr/sbin/ubnt-hal" | sudo tee /etc/sudoers.d/02snmp-ubnt-hal
-       echo "pass .1.3.6.1.4.1.4413.1.1.43.1 /config/scripts/ubnt-hal-snmp.sh" | sudo tee -a /etc/snmp/snmpd.conf
-       sudo systemctl reload snmpd
+2. Copy `post-config.sh` to `/config/scripts/post-config.d/ubnt-hal-snmp.sh` on
+   the router
+3. Make sure both are executable: `chmod 0775 /config/scripts/ubnt-hal-snmp.sh
+   /config/scripts/post-config.d/ubnt-hal-snmp.sh`
+4. Execute the configurator:
+   `sudo /config/scripts/post-config.d/ubnt-hal-snmp.sh`
 
 ## Output
 
