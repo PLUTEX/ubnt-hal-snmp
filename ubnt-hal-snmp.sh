@@ -13,6 +13,7 @@ fi
 
 OID_PREFIX=".1.3.6.1.4.1.4413.1.1.43.1"
 CACHE_FILE="/dev/shm/$(basename "$0").cache"
+CACHE_MAX_AGE=1  # minutes
 
 fan_oid_list() {
 	sudo /usr/sbin/ubnt-hal getFanTach | sort | {
@@ -65,7 +66,7 @@ oid_list() {
 }
 
 cached_oid_list() {
-	if ! find "$CACHE_FILE" -mmin +1 -exec false {} + 2> /dev/null; then
+	if [ -z "$(find "$CACHE_FILE" -mmin "-${CACHE_MAX_AGE}" 2> /dev/null)" ]; then
 		oid_list > "${CACHE_FILE}.$$"
 		mv "${CACHE_FILE}.$$" "$CACHE_FILE"
 	fi
